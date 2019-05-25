@@ -1,0 +1,38 @@
+{% extends "template.html" %}
+{% block head %}
+<title>Result</title>
+<style>
+    h2 {
+        font-family: 'Raleway', sans-serif;
+    }
+</style>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+{% endblock %}
+{% block body %}
+
+<div class="container">
+    <h2>{{title}}</h2>
+    <div class="chart" id="bar">
+        <script>
+            var graphs = {{ bar | safe}};
+            Plotly.plot('bar', graphs, {});
+        </script>
+    </div>
+</div>
+<div class="container">
+    <nav aria-label="...">
+        <ul class="pagination">
+            {% for num in vote.iter_pages() %}
+            {% if num %}
+            <li class="page-item"><a class="page-link" href="{{url_for('result',page=num)}}">{{num}}</a></li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="#">... </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

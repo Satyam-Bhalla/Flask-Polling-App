@@ -1,0 +1,91 @@
+{% extends "template.html" %}
+{% block head %}
+<title>PollingSite</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #main {
+        min-height: 481px;
+    }
+
+    .title {
+        width: 100%;
+        margin-top: 5%;
+        text-align: center;
+    }
+
+    #sidenav {
+        color: white;
+        height: 100%;
+        background-image: url("https://images.unsplash.com/photo-1522875850847-f1965f2bb288?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80");
+        background-size: cover;
+        background-position-x: 82%;
+    }
+
+    #sidenav #overlay {
+        width: 85.3vh;
+        height: 80.6vh;
+        padding-top: 33%;
+        background-color: rgba(0, 0, 0, 0.5);
+        text-align: -webkit-center;
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #sidenav #overlay span {
+        font-size: 40px;
+        font-family: 'Macondo Swash Caps', cursive;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-5" id="sidenav">
+        <div id="overlay">
+            <span>Vote Today For A Better Tomorrow</span>
+            <p>Login now to Vote</p>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="container" style="margin:25px auto; width:max-content">
+            <form action="" method="POST">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Full Name</label>
+                    <input type="text" name="fname" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp" placeholder="Enter Name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="uname" class="form-control" id="username" aria-describedby="emailHelp"
+                        placeholder="Enter Username">
+                </div>
+                <div class="form-group">
+                    <label for="mobile">Mobile No.</label>
+                    <input type="text" name="mob" class="form-control" id="mobile" aria-describedby="emailHelp"
+                        placeholder="Enter Mobile No.">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Aadhar Card</label>
+                    <input type="password" name="aadhar" class="form-control" id="exampleInputPassword1"
+                        placeholder="Aadhar Number">
+                    <small id="emailHelp" class="form-text text-muted">Your Aadhar number is secured with end to end
+                        encryption.</small>
+                </div>
+                <button type="submit" style="margin-left:37%" class="btn btn-secondary">Submit</button>
+                <br>
+                <br>
+                {% if msg %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error!</strong> {{msg}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

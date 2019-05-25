@@ -1,0 +1,344 @@
+{% extends "template.html" %}
+{% block head %}
+<title>Vote!</title>
+<style>
+    @font-face {
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Open Sans Regular'), local('OpenSans-Regular'), url(https://fonts.gstatic.com/s/opensans/v16/mem8YaGs126MiZpBA-UFVZ0e.ttf) format('truetype');
+    }
+
+    @keyframes roll-in {
+        0% {
+            top: 10px;
+            opacity: 0;
+        }
+
+        100% {
+            top: 0;
+            opacity: 1;
+        }
+    }
+
+    @keyframes fade {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulse {
+        from {
+            transform: scale3d(1, 1, 1);
+        }
+
+        50% {
+            transform: scale3d(1.05, 1.05, 1.05);
+        }
+
+        to {
+            transform: scale3d(1, 1, 1);
+        }
+    }
+
+    .pulse {
+        animation: pulse 1s infinite;
+    }
+
+    .fade-in {
+        animation: fade 0.75s ease;
+    }
+
+    .quiz {
+        margin: 2em auto;
+        min-height: 40vh;
+        font-size: 16px;
+    }
+
+    .quiz .progress {
+        position: relative;
+        transition: width 0.4s ease;
+        margin-bottom: 1em;
+        background: #b5b5b5;
+        border-radius: 0;
+        width: 100%;
+        height: 2em;
+        font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+    }
+
+    .quiz .progress .progress-bar {
+        background-color: #1d77cc;
+    }
+
+    .quiz .progress .counter {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        font-weight: normal;
+        color: #fff;
+        height: 100%;
+        font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+        font-size: 1.25em;
+        margin: auto 0.5em;
+        letter-spacing: 0.025em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .quiz form {
+        width: 90%;
+        margin: 1.5em auto;
+    }
+
+    .quiz .img-fluid {
+        margin: 2em auto;
+        max-width: 360px;
+        display: block;
+    }
+
+    .quiz .question {
+        font-weight: bold;
+        line-height: 1.35;
+        margin-bottom: 0.75em;
+    }
+
+    .quiz .option {
+        margin-bottom: 0.25em;
+        transition: all 0.25s ease;
+        font-size: 0.9em;
+    }
+
+    .quiz button {
+        padding: 0.75em;
+        font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+        background-color: #28a745;
+        border: 0;
+        color: #fff;
+        font-size: 1em;
+        transition: 0.25s all;
+        white-space: nowrap;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .quiz button i {
+        margin-left: 0.15em;
+    }
+
+    .quiz button:disabled {
+        opacity: 0.5;
+    }
+
+    .quiz input[type="radio"] {
+        position: absolute;
+        left: -9999px;
+    }
+
+    .quiz input[type="radio"]+label {
+        position: relative;
+        font-weight: normal;
+        padding-left: 28px;
+        cursor: pointer;
+        line-height: 20px;
+        display: inline-block;
+        color: #666;
+    }
+
+    .quiz input[type="radio"]+label::before {
+        text-align: center;
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ddd;
+        border-radius: 100%;
+        background: #fff;
+    }
+
+    .quiz input[type="radio"]+label::after {
+        content: '';
+        width: 12px;
+        height: 12px;
+        background-color: #222;
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        border-radius: 100%;
+        transition: all 0.2s ease;
+    }
+
+    .quiz .dim input[type="radio"]+label::before,
+    .quiz .correct input[type="radio"]+label::before {
+        border: 0;
+        font-size: 1.2em;
+        animation: 0.25s roll-in ease;
+    }
+
+    .quiz .dim input[type="radio"]+label::after,
+    .quiz .correct input[type="radio"]+label::after {
+        display: none;
+    }
+
+    .quiz .correct input[type="radio"]+label:before {
+        content: '\f00C';
+        font-family: "FontAwesome" !important;
+        color: #36ad3b;
+    }
+
+    .quiz .dim input[type="radio"]:checked+label:before {
+        content: '\f00d';
+        font-family: "FontAwesome" !important;
+        color: #ff1100;
+    }
+
+    .quiz input[type="radio"]:not(:checked)+label:after {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    .quiz input[type="radio"]:checked+label:after {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .quiz .dim {
+        opacity: 0.5;
+    }
+
+    .quiz .bottom {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .quiz .bottom div {
+        flex: 1 1 70%;
+        font-size: 0.9em;
+    }
+
+    .quiz .bottom .next {
+        flex: 0 1 10%;
+        margin-left: 3em;
+    }
+
+    @media (max-width: 600px) {
+
+        .quiz .bottom div,
+        .quiz .bottom .next {
+            flex-basis: 100%;
+        }
+
+        .quiz .bottom .next {
+            margin-left: 0;
+        }
+    }
+
+    .quiz .get-results {
+        display: block;
+        margin: 2em auto;
+    }
+
+    .quiz .results {
+        font-size: 1.1em;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 40vh;
+    }
+
+    .quiz .results h1 {
+        font-family: "Open Sans", "Helvetica", "Arial", sans-serif;
+    }
+
+    .quiz .results button {
+        margin-top: 1em;
+    }
+
+    .hvrbox-layer_top {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        padding: 15px;
+        -moz-transition: all 0.4s ease-in-out 0s;
+        -webkit-transition: all 0.4s ease-in-out 0s;
+        -ms-transition: all 0.4s ease-in-out 0s;
+        transition: all 0.4s ease-in-out 0s;
+    }
+
+    .card:hover .hvrbox-layer_top:hover,
+    .hvrbox-layer_top:hover {
+        opacity: 1;
+    }
+
+    .but {
+        margin-top: 34%;
+        margin-left: 41%;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<main class="container">
+    <form action="" method="post">
+        <section id="riots-to-renaissance">
+            <section class="quiz">
+                <div class="question-container">
+                    <p class="question">
+                        <span>{{main.title}}</span>
+                    </p>
+                    <div class="row">
+                        {% for i in opt %}
+                        {% if i.f_id == main.id %}
+                        <div class="col-md">
+                            <div class="card" style="width: 30rem;margin-bottom: 15%;">
+                                <img style="height:20rem" class="card-img-top" src="data:image/jpeg;base64,{{i.image}}">
+                                <div class="hvrbox-layer_top">
+                                    <a href="{{url_for('vote',opt=i.id,v=main.id)}}"
+                                        class="but btn btn-primary">Vote</a>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{i.value}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
+            </section>
+        </section>
+    </form>
+</main>
+<script>
+    var radio = document.getElementsByClassName('radio');
+    var btn = document.getElementById('btn');
+
+    function func() {
+        for (let i = 0; i < radio.length; i++) {
+            if (radio[i].checked == true) {
+                btn.disabled = false;
+                break;
+            }
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="styleshhet" href="{{url_for('static',filename='css/foundation.min.css')}}">
+    <link
+        href="https://fonts.googleapis.com/css?family=Macondo+Swash+Caps|Open+Sans|Raleway|PT+Sans+Narrow|Poppins&display=swap"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <style>
+        #main {
+            min-height: 410px;
+        }
+
+        #footer {
+            height: 120px;
+            width: 100%;
+            line-height: 120px;
+            color: #fff;
+            background-color: #28a745 !important;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        #footer p {
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 0;
+        }
+
+        a {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        span {
+            font-family: 'PT Sans', sans-serif;
+        }
+    </style>
+    {% block head  %} {% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand mb-0 h1">Voting App</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% if session['username'] and session['username'] != 'admin' %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Poll
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for i in vote %}
+                        <a class="dropdown-item" href="{{url_for('polling',page=i.id)}}">{{i.title}}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+            <form class="form-inline">
+                {% if session['username'] == 'admin' %}
+                <a style="padding: 5px;color:white;" href="{{url_for('result')}}" class="nav-links">View Results</a>
+                {% endif %}
+                {% if session['username'] %}
+                <a style="color:white;" href="{{url_for('logout')}}" class="nav-links">Logout</a>
+                {% endif %}
+            </form>
+        </div>
+    </nav>
+    <div id="main">
+        {% block body %} {% endblock %}
+    </div>
+    <footer id="footer">
+        <p>&copy; Polling 2019</p>
+    </footer>
+</body>
+
+</html>

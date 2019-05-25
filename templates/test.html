@@ -1,0 +1,38 @@
+{% extends "template.html" %}
+{% block head %}
+<title>Thanks for your feedback!</title>
+<style>
+    #main {
+        min-height: 483px;
+        margin-bottom: -16px;
+        background-image: url("https://images.unsplash.com/photo-1494172961521-33799ddd43a5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=751&q=80");
+        background-size: cover;
+    }
+
+    #hero {
+        height: 75.6vh;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+        font-family: 'Raleway', sans-serif;
+        padding-top: 15%;
+        padding-left: 31%;
+        color: white;
+    }
+
+    #p {
+        color: white;
+        font-family: 'Raleway', sans-serif;
+        padding-left: 26%;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div id="hero">
+    <div id="hero-overlay">
+        <h1>Thanks for your feedbacks!</h1>
+        <p id="p">You have alreay voted for this poll. To vote for another poll select new poll from above.</p>
+    </div>
+</div>
+{% endblock %}
